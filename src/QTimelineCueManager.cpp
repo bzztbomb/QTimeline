@@ -135,6 +135,17 @@ void QTimelineCueManager::initMenu()
     mMenu->addButton( "New cue", "", this, &QTimelineCueManager::menuEventHandler );
 }
 
+void QTimelineCueManager::setNextCue(QTimelineCue* nextCue)
+{
+  for (size_t i = 0; i < mCueList.size(); i++)
+  {
+    if (mCueList[i].get() == nextCue)
+    {
+      mCurrentCue = i > 0 ? mCueList[i-1] : NULL;
+      return;
+    }
+  }
+}
 
 bool QTimelineCueManager::playCue( int cueN )
 {
@@ -158,9 +169,9 @@ bool QTimelineCueManager::playCue( int cueN )
         return true;                                                // select cue
     }
     
-    if ( isTimeOnCue() )
-        return false;
-    
+//    if ( isTimeOnCue() )
+//        return false;
+  
     for( size_t k=0; k < mCueList.size(); k++ )
     {
         if ( mCueList[k] == mCurrentCue )

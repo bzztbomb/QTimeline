@@ -310,7 +310,9 @@ public:
         
         thisRef = NULL;
     }
-    
+  
+    void setZoom(float newZoom);
+    float getZoom() const;
 private:
     
     ci::ColorA getThemeColor( ci::XmlTree tree, std::string tag );

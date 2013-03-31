@@ -310,6 +310,28 @@ bool QTimeline::keyDown( KeyEvent event )
     return false;
 }
 
+void QTimeline::setZoom(float newZoom)
+{
+  mZoom = math<float>::clamp( newZoom, 0.25f, 4.0f );
+  // update items labels
+  vector<QTimelineItemRef> items;
+  for( size_t k=0; k < mTracks.size(); k++ )
+  {
+    items = mTracks[k]->getItems();
+    for( size_t j=0; j<items.size(); j++ )
+      items[j]->updateLabel();
+  }
+  
+  // update cue list labels
+  vector<QTimelineCueRef> cueList = mCueManager->getCueList();
+  for( size_t k=0; k < cueList.size(); k++ )
+    cueList[k]->updateLabel();
+}
+
+float QTimeline::getZoom() const
+{
+    return mZoom;
+}
 
 bool QTimeline::mouseWheel( MouseEvent event )
 {
@@ -318,23 +340,9 @@ bool QTimeline::mouseWheel( MouseEvent event )
     
     // update zoom
     float incr  = ( event.getWheelIncrement() > 0 ) ? 0.05f : -0.05f;
-    mZoom       = (int)( ( mZoom + incr ) * 100.0f + 0.5f ) / 100.0f;   // +0.5f fix floating point madness
-    mZoom       = math<float>::clamp( mZoom, 0.25f, 4.0f );
-    
-    // update items labels
-    vector<QTimelineItemRef> items;
-    for( size_t k=0; k < mTracks.size(); k++ )
-    {
-        items = mTracks[k]->getItems();
-        for( size_t j=0; j<items.size(); j++ )
-            items[j]->updateLabel();
-    }
-    
-    // update cue list labels
-    vector<QTimelineCueRef> cueList = mCueManager->getCueList();
-    for( size_t k=0; k < cueList.size(); k++ )
-        cueList[k]->updateLabel();
-    
+    float newZoom       = (int)( ( mZoom + incr ) * 100.0f + 0.5f ) / 100.0f;   // +0.5f fix floating point madness
+    setZoom(newZoom);
+  
     return false;
 }
 

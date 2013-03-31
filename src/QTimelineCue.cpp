@@ -227,6 +227,18 @@ void QTimelineCue::menuEventHandler( QTimelineMenuItemRef item )
         QTimeline::getPtr()->closeMenu( mMenu );
         updateLabel();
     }
+    else if ( item->getMeta() == "setNext")
+    {
+      mCueManager->setNextCue(this);
+      QTimeline::getPtr()->closeMenu( mMenu );      
+    }
+    else if ( item->getMeta() == "playCue")
+    {
+      mCueManager->setNextCue(this);
+      QTimeline::getPtr()->play(false, QTimeline::CUE_LIST);
+      QTimeline::getPtr()->playCue();
+      QTimeline::getPtr()->closeMenu( mMenu );
+    }
 }
 
 
@@ -237,10 +249,13 @@ void QTimelineCue::initMenu()
     mMenu->addTextBox( getName(), "name_text_box", this, &QTimelineCue::menuEventHandler );
 
     mMenu->addColorPalette( this, &QTimelineCue::menuEventHandler );
-    
+
+    mMenu->addButton("Play!", "playCue", this, &QTimelineCue::menuEventHandler);
+    mMenu->addButton("Set as next cue", "setNext", this, &QTimelineCue::menuEventHandler);
     mMenu->addSeparator();
-    
+  
     mMenu->addButton( "X DELETE", "delete", this, &QTimelineCue::menuEventHandler );
+  
 }
 
 

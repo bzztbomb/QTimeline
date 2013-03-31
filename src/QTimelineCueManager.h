@@ -57,7 +57,9 @@ public:
     std::vector<QTimelineCueRef> getCueList() { return mCueList; }
     
     QTimelineCueRef getCurrentCue() { return mCurrentCue; }
-    
+  
+    void setNextCue(QTimelineCue* nextCue);
+  
     bool playCue( int cueN = -1 );
     
     bool isTimeOnCue();
