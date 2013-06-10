@@ -360,7 +360,8 @@ void QTimelineTrack::eraseModule( QTimelineItemRef itemRef )
 {
     mSelectedItem.reset();
     mMouseOnItem.reset();
-    
+    mActiveItem.reset();
+  
     for( size_t k=0; k < mItems.size(); k++ )
         if ( mItems[k] == itemRef )
         {
