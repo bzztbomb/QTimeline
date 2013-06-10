@@ -313,6 +313,9 @@ public:
   
     void setZoom(float newZoom);
     float getZoom() const;
+  
+    ci::gl::TextureFontRef getFontSmall() { return mFontSmall; }
+    ci::gl::TextureFontRef getFontMedium() { return mFontMedium; }  
 private:
     
     ci::ColorA getThemeColor( ci::XmlTree tree, std::string tag );

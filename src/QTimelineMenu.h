@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "cinder/app/App.h"
 #include "cinder/gl/TextureFont.h"
 #include "cinder/Function.h"
 
@@ -45,12 +46,7 @@ public:
         init();
     }
 
-    virtual void init()
-    {
-        mHeight = 0.0f;
-        
-        mFont   = ci::gl::TextureFont::create( ci::Font( "Helvetica", 12 ) );
-    }
+    virtual void init();
     
     virtual ~QTimelineMenuItem() {}
     

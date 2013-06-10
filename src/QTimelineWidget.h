@@ -29,14 +29,8 @@ class QTimelineWidget
     
 public:
     
-    QTimelineWidget( std::string name = "" )
-    {
-        mFont           = ci::gl::TextureFont::create( ci::Font( "Helvetica", 12 ) );
-        mMenu           = new QTimelineMenu();
-        
-        setName( name );
-    }
-    
+  QTimelineWidget( std::string name = "" );
+  
     virtual ~QTimelineWidget()
     {
         if ( mMenu )

@@ -28,7 +28,7 @@ QTimelineCue::QTimelineCue( QTimelineCueManager *cueManager, string name, double
     mHandleColor        = QTimeline::mCueHandleCol;
     mHandleOverColor    = QTimeline::mCueHandleOverCol;
 
-    mFont               = ci::gl::TextureFont::create( ci::Font( "Helvetica", 14 ) );
+    mFont               = QTimeline::getPtr()->getFontMedium();
 
     mIsMouseOn          = false;
     
