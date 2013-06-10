@@ -117,7 +117,10 @@ protected:
     float       *mVar;
     float       mMax;
     float       mMin;
-    
+  
+    bool        mMidiActive;
+    int         mMidiHandle;
+  
     QTimelineKeyframeRef                mMouseOnKeyframe;
     std::vector<QTimelineKeyframeRef>   mKeyframes;
     

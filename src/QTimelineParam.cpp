@@ -15,6 +15,9 @@
 #include "QTimelineItem.h"
 #include "QTimelineParam.h"
 
+
+#include "midiMapper.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -24,7 +27,7 @@ bool sortKeyframesHelper(QTimelineKeyframeRef a, QTimelineKeyframeRef b) { retur
 
 
 QTimelineParam::QTimelineParam( QTimelineItemRef itemRef, const std::string &name, float *var, float minVal, float maxVal )
-: mParentModule(itemRef), mVar(var), mMax(maxVal), mMin(minVal), mKeyframeMenu(NULL), QTimelineWidget(name)
+: mParentModule(itemRef), mVar(var), mMax(maxVal), mMin(minVal), mKeyframeMenu(NULL), QTimelineWidget(name), mMidiHandle(-1)
 {
     mBgColor                = QTimeline::mParamsBgCol;
     mBgOverColor            = QTimeline::mParamsBgOverCol;
@@ -67,6 +70,8 @@ QTimelineParam::~QTimelineParam()
     
     mKeyframeValue = NULL;
     delete mKeyframeMenu;
+    if (mMidiHandle != -1)
+        MidiMapper::instance()->midiForget(mMidiHandle);
 //    delete mVar; // should I call it?
 }
 
@@ -490,6 +495,30 @@ void QTimelineParam::keyframeMenuEventHandler( QTimelineMenuItemRef item )
         mActiveKeyframe = NULL;
         QTimeline::getPtr()->closeMenu( mKeyframeMenu );
     }
+    if (item->getMeta() == "midi_learn")
+    {
+        mMidiActive = true;
+        mMidiHandle = MidiMapper::instance()->midiLearn([this](float val) {
+            if (mMidiActive)
+            {
+                float range = getMax() - getMin();
+                float newval = (val * range) + getMin();
+                if (mActiveKeyframe)
+                {
+                    mActiveKeyframe->set(mActiveKeyframe->getTime(), newval);
+                }
+                *mVar = newval;
+            }
+        });
+        QTimeline::getPtr()->closeMenu( mKeyframeMenu );
+    }
+    if (item->getMeta() == "midi_forget")
+    {
+        mMidiActive = false;
+        MidiMapper::instance()->midiForget(mMidiHandle);
+        mMidiHandle = -1;
+        QTimeline::getPtr()->closeMenu( mKeyframeMenu );
+    }
 }
 
 Vec2f QTimelineParam::getRelPosNorm( Vec2f pos )
@@ -536,6 +565,8 @@ void QTimelineParam::initMenu()
 
     mKeyframeMenu = new QTimelineMenu();
     mKeyframeValue = mKeyframeMenu->addTextBox( getName(), "value_text_box", this, &QTimelineParam::keyframeMenuEventHandler );
+    mKeyframeMenu->addButton("MIDI LEARN", "midi_learn", this, &QTimelineParam::keyframeMenuEventHandler);
+    mKeyframeMenu->addButton("MIDI FORGET", "midi_forget", this, &QTimelineParam::keyframeMenuEventHandler);
 }
 
 
