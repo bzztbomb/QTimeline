@@ -12,7 +12,7 @@
 #ifndef QTIMELINE
 #define QTIMELINE
 
-#pragma once
+#pragma once 
 
 #include "cinder/app/AppBasic.h"
 #include "cinder/Xml.h"
@@ -37,6 +37,20 @@
 
 typedef std::shared_ptr<class QTimeline>		QTimelineRef;
 
+namespace cinder
+{
+  //! Easing equation for step, hold the value until the end.
+  inline float easeStep( float t )
+  {
+    if ( t == 1.0f )
+      return 1.0f;
+    else
+      return 0.0f;
+  }
+  
+  //! Easing equation for step, hold the value until the end.
+  struct EaseStep{ float operator()( float t ) const { return easeStep( t ); } };  
+};
 
 class QTimeline : public std::enable_shared_from_this<QTimeline>
 {

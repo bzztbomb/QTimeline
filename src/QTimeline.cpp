@@ -157,7 +157,7 @@ void QTimeline::render()
     gl::color( mTransportTextCol );
     mFontBig->drawString( mTimeStr, mTransportRect.getUpperRight() + Vec2f( -125, 19 ) );
     mFontSmall->drawString( toString( (int)App::get()->getAverageFps() ) + " FPS", mTransportRect.getUpperRight() + Vec2f( -50, 19 ) );
-
+  
     // render tracks
     mTracksRect = mTransportRect;
     mTracksRect.offset( Vec2f( 0, - TIMELINE_WIDGET_PADDING ) );
